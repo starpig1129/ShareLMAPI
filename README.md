@@ -28,7 +28,7 @@ ShareLMAPI is a local language model sharing API that uses FastAPI to provide in
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/ShareLMAPI.git
+git clone https://github.com/starpig1129/ShareLMAPI.git
 cd ShareLMAPI
 ```
 
