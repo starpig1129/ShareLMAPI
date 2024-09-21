@@ -28,7 +28,7 @@ ShareLMAPI 是一個本地語言模型共享 API，使用 FastAPI 提供接口�
 ### 1. 克隆存儲庫
 
 ```bash
-git https://github.com/starpig1129/ShareLMAPI.git
+git clone https://github.com/yourusername/ShareLMAPI.git
 cd ShareLMAPI
 ```
 
