@@ -146,10 +146,10 @@ pip install ShareLMAPI
 Here's an example of how to use the `LocalModelAPIClient` to call the API:
 
 ```python
-from local_model_api.client.client import LocalModelAPIClient
+from ShareLMAPI.client import ShareLMAPIClient
 
 # Create API client
-client = LocalModelAPIClient(base_url="http://localhost:8000")
+client = ShareLMAPIClient(base_url="http://localhost:8000")
 
 # Streaming generation
 for chunk in client.generate_text("Once upon a time", max_length=50, streamer=True):
