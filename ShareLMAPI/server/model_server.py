@@ -1,4 +1,3 @@
-# local_model_api/server/model_server.py
 from fastapi import FastAPI, HTTPException
 from transformers import TextIteratorStreamer
 from threading import Thread

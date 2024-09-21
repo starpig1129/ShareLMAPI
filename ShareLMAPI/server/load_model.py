@@ -1,6 +1,3 @@
-# local_model_api/server/load_model.py
-import os
-import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import PeftModel
 import yaml
@@ -72,7 +69,7 @@ class ModelLoader:
         if peft_type == "lora":
             return PeftModel.from_pretrained(
                 base_model,
-                model_name,  # 這裡應該是 PEFT 模型的路徑或名稱
+                model_name,  
                 **self.config["model"]["peft"]["peft_config"]
             )
         else:

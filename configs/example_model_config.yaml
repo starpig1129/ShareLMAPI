@@ -1,52 +1,42 @@
-# configs/model_config.yaml
-
 model:
-  # 基礎模型名稱，可以根據需要更改為你選擇的模型
+  # Base model name, can be changed to your chosen model
   name: "gpt-2"
 
-  # 選擇載入方法，選項包括:
-  # - default: 默認載入方式
-  # - bitsandbytes: 使用 BitsAndBytesConfig 進行 8 位量化
-  # - peft: 使用 PEFT（例如 LoRA）進行參數高效微調
+  # Choose the loading method, options include:
+  # - default: Default loading method
+  # - bitsandbytes: Use BitsAndBytesConfig for quantization
+  # - peft: Use PEFT (e.g., LoRA) for parameter-efficient fine-tuning
   loading_method: "default"
 
-  # 默認載入方式的設置
+  # Settings for default loading method
   default:
-    device: "cuda"  # 載入設備，可選 "cpu" 或 "cuda"
-    # 其他默認設置可以在此添加
+    device: "cuda"  # Loading device, can be "cpu" or "cuda"
+    # Other default settings can be added here
 
-  # 使用 BitsAndBytesConfig 進行 8 位量化的設置
+  # Settings for 8-bit quantization using BitsAndBytesConfig
   bitsandbytes:
     device: "cuda"
-    load_in_8bit: true  # 啟用 8 位量化
-    # 其他 BitsAndBytesConfig 相關設置
+    # Other BitsAndBytesConfig related settings
     quantization_config:
-      # 具體的量化配置參數
-      quant_type: "nf4"  # 量化類型，可選 "nf4", "fp4" 等
-      # 根據需要添加更多配置參數
+      # Specific quantization configuration parameters
+      quant_type: "nf4" 
+      load_in_4bit: True
+      bnb_4bit_quant_type: "nf4"
+      bnb_4bit_compute_dtype: "float16"
+      bnb_4bit_use_double_quant: False
 
-  # 使用 PEFT（如 LoRA）的設置
+  # Settings for using PEFT (such as LoRA)
   peft:
     device: "cuda"
-    peft_type: "lora"  # PEFT 類型，例如 "lora"
+    peft_type: "lora" 
     peft_config:
-      # LoRA 具體的配置參數
+      # Specific configuration parameters for LoRA
       r: 8
       lora_alpha: 16
       lora_dropout: 0.1
-      target_modules: ["q_proj", "v_proj"]  # 需要應用 LoRA 的模塊名稱
-    # 如果使用其他 PEFT 方法，可以在此添加相應的配置
+      target_modules: ["q_proj", "v_proj"]
+    # If using other PEFT methods, corresponding configurations can be added here
 
-adaptive_models:
-  # 定義自適應模型載入的不同選項
-  default: "gpt-2"
-  small: "gpt-2-small"
-  medium: "gpt-2-medium"
-  large: "gpt-2-large"
-  # 可以根據需要添加更多模型選項
-
-# API 相關配置
-api:
-  host: "0.0.0.0"
-  port: 8000
-  # 其他 API 相關設置
+# Model server settings
+model_server:
+  model_server_url: "http://localhost:5000"

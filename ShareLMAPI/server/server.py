@@ -1,13 +1,21 @@
-# local_model_api/server/server.py
 import requests
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import StreamingResponse, JSONResponse
 import logging
-
+import yaml
 app = FastAPI()
 logger = logging.getLogger(__name__)
 
-MODEL_SERVER_URL = "http://localhost:5000"
+def load_config(config_path="configs/model_config.yaml"):
+    try:
+        with open(config_path, "r") as file:
+            return yaml.safe_load(file)
+    except Exception as e:
+        logger.error(f"Error loading config: {str(e)}")
+        raise
+
+config = load_config()
+MODEL_SERVER_URL = config["server"]["model_server_url"]
 
 def call_model_server(endpoint, payload, stream=False):
     try:

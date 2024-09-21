@@ -1,4 +1,3 @@
-# local_model_api/client/client.py
 import requests
 import logging
 
