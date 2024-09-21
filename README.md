@@ -40,13 +40,6 @@ cd ShareLMAPI
 conda env create -f environment.yml
 conda activate ShareLMAPI
 ```
-
-使用 Pip 安裝：
-
-```bash
-pip install -r requirements.txt
-```
-
 ### 3. 安裝本地開發環境
 
 如果你計劃開發此套件，請使用以下命令安裝此包：
@@ -71,7 +64,7 @@ pip install -e .
 首先，啟動模型伺服器來加載和管理語言模型：
 
 ```bash
-uvicorn local_model_api.server.model_server:app --host 0.0.0.0 --port 5000
+uvicorn ShareLMAPI.server.model_server:app --host 0.0.0.0 --port 5000
 ```
 
 ### 啟動前端 API 伺服器
@@ -79,7 +72,8 @@ uvicorn local_model_api.server.model_server:app --host 0.0.0.0 --port 5000
 在模型伺服器運行後，啟動前端伺服器來處理客戶端的請求：
 
 ```bash
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker local_model_api.server.server:app--bind 0.0.0.0:8000
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bind 0.0.0.0:8000
+
 ```
 
 ## API 說明
@@ -117,13 +111,13 @@ curl -X POST "http://localhost:8000/generate_stream" \
 
 ## 客戶端使用
 
-以下是如何使用 `LocalModelAPIClient` 調用 API 的示例：
+以下是如何使用 `ShareLMClient` 調用 API 的示例：
 
 ```python
-from local_model_api.client.client import LocalModelAPIClient
+from local_model_api.client.client import ShareLMClient
 
 # 創建 API 客戶端
-client = LocalModelAPIClient(base_url="http://localhost:8000")
+client = ShareLMClient(base_url="http://localhost:8000")
 
 # 流式生成
 for chunk in client.generate_text("Once upon a time", max_length=50, streamer=True):

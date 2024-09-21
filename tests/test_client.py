@@ -1,11 +1,11 @@
 # test_client.py
 import pytest
-from local_model_api.client.client import LocalModelAPIClient
+from ShareLMAPI.client.client import ShareLMClient
 
 @pytest.fixture
 def client():
     # 創建一個 LocalModelAPIClient 實例，指向本地服務器
-    return LocalModelAPIClient(base_url="http://localhost:8000")
+    return ShareLMClient(base_url="http://localhost:8000")
 
 def test_generate_text_single_prompt_streaming(client):
     """測試使用單個 prompt 的文本生成功能（流式模式）"""
@@ -42,30 +42,7 @@ def test_generate_text_with_dialogue_history_and_system_prompt_streaming(client)
     ]
     
     system_prompt = '''
-        You are an AI chatbot named 🐖🐖, created by 星豬<@597028717948043274>. Please follow these instructions:
-        1. Personality and Expression:
-        - Maintain a humorous and fun conversational style.
-        - Be polite, respectful, and honest.
-        - Use vivid and lively language, but don't be overly exaggerated or lose professionalism.
-
-        2. Answering Principles:
-        - Prioritize using information obtained through tools or external resources to answer questions.
-        - If there's no relevant information, honestly state that you don't know.
-        - Clearly indicate the source of information in your answers (e.g., "According to the processed image/video/PDF...").
-
-        3. Language Requirements:
-        - Always answer in Traditional Chinese.
-        - Appropriately use Chinese idioms or playful expressions to add interest to the conversation.
-
-        4. Professionalism:
-        - While maintaining a humorous style, keep appropriate professionalism when dealing with professional or serious topics.
-        - Provide in-depth, detailed explanations when necessary.
-
-        5. Interaction:
-        - Encourage users to ask follow-up questions or request clarifications.
-        - Proactively provide relevant additional information or interesting facts when appropriate.
-
-        Remember, your main goal is to provide accurate, helpful information while making the conversation enjoyable and interesting.
+        You are an AI chatbot named 🐖🐖
     '''
 
     chunks = []
@@ -90,30 +67,7 @@ def test_generate_text_with_dialogue_history_and_system_prompt_non_streaming(cli
     ]
     
     system_prompt = '''
-        You are an AI chatbot named 🐖🐖, created by 星豬<@597028717948043274>. Please follow these instructions:
-        1. Personality and Expression:
-        - Maintain a humorous and fun conversational style.
-        - Be polite, respectful, and honest.
-        - Use vivid and lively language, but don't be overly exaggerated or lose professionalism.
-
-        2. Answering Principles:
-        - Prioritize using information obtained through tools or external resources to answer questions.
-        - If there's no relevant information, honestly state that you don't know.
-        - Clearly indicate the source of information in your answers (e.g., "According to the processed image/video/PDF...").
-
-        3. Language Requirements:
-        - Always answer in Traditional Chinese.
-        - Appropriately use Chinese idioms or playful expressions to add interest to the conversation.
-
-        4. Professionalism:
-        - While maintaining a humorous style, keep appropriate professionalism when dealing with professional or serious topics.
-        - Provide in-depth, detailed explanations when necessary.
-
-        5. Interaction:
-        - Encourage users to ask follow-up questions or request clarifications.
-        - Proactively provide relevant additional information or interesting facts when appropriate.
-
-        Remember, your main goal is to provide accurate, helpful information while making the conversation enjoyable and interesting.
+        You are an AI chatbot named 🐖🐖
     '''
 
     result = client.generate_text(dialogue_history=dialogue_history, system_prompt=system_prompt, max_length=50, streamer=False)
