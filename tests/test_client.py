@@ -1,6 +1,6 @@
 # test_client.py
 import pytest
-from ShareLMAPI.client.client import ShareLMClient
+from ShareLMAPI.client import ShareLMClient
 
 @pytest.fixture
 def client():
