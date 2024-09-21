@@ -48,15 +48,13 @@ conda activate ShareLMAPI
 ```bash
 pip install -r requirements.txt
 ```
+### 3. 本地安裝
 
-### 3. 本地開發安裝
-
-如果您計劃開發此包，請使用以下命令安裝：
+如果您預計在本地使用，請使用以下命令安裝：
 
 ```bash
 pip install -e .
 ```
-
 ## 配置
 
 1. 導航到 `configs` 目錄並打開 `model_config.yaml`。
@@ -138,14 +136,17 @@ gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bi
 * **參數**：與 `/generate_stream` 相同
 
 ## 客戶端使用
-
-以下是使用 `LocalModelAPIClient` 調用 API 的示例：
+### 安裝
+```bash
+pip install ShareLMAPI
+```
+以下是使用 `ShareLMAPI` 調用 API 的示例：
 
 ```python
-from local_model_api.client.client import LocalModelAPIClient
+from ShareLMAPI.client import ShareLMAPIClient
 
 # 創建 API 客戶端
-client = LocalModelAPIClient(base_url="http://localhost:8000")
+client = ShareLMAPIClient(base_url="http://localhost:8000")
 
 # 流式生成
 for chunk in client.generate_text("從前有一個", max_length=50, streamer=True):

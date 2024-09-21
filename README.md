@@ -139,7 +139,10 @@ Generate model responses without streaming.
 * **Parameters**: Same as `/generate_stream`
 
 ## Client Usage
-
+### install
+```bash
+pip install ShareLMAPI
+```
 Here's an example of how to use the `LocalModelAPIClient` to call the API:
 
 ```python
