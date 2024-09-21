@@ -36,3 +36,6 @@ configs/model_config.yaml
 
 # 忽略本地環境文件
 *.env
+
+dist
+build
