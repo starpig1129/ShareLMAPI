@@ -9,6 +9,7 @@ ShareLMAPI 是一個本地語言模型共享 API，使用 FastAPI 提供接口�
 - [安裝](#安裝)
 - [配置](#配置)
 - [使用方法](#使用方法)
+- [Docker 使用教學](#docker-使用教學)
 - [API 文檔](#api-文檔)
 - [客戶端使用](#客戶端使用)
 - [測試](#測試)
@@ -28,7 +29,7 @@ ShareLMAPI 是一個本地語言模型共享 API，使用 FastAPI 提供接口�
 ### 1. 克隆存儲庫
 
 ```bash
-git clone https://github.com/yourusername/ShareLMAPI.git
+git clone https://github.com/starpig1129/ShareLMAPI.git
 cd ShareLMAPI
 ```
 
@@ -48,6 +49,7 @@ conda activate ShareLMAPI
 ```bash
 pip install -r requirements.txt
 ```
+
 ### 3. 本地安裝
 
 如果您預計在本地使用，請使用以下命令安裝：
@@ -55,6 +57,7 @@ pip install -r requirements.txt
 ```bash
 pip install -e .
 ```
+
 ## 配置
 
 1. 導航到 `configs` 目錄並打開 `model_config.yaml`。
@@ -111,6 +114,40 @@ uvicorn ShareLMAPI.server.model_server:app --host 0.0.0.0 --port 5000
 ```bash
 gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bind 0.0.0.0:8000
 ```
+
+## Docker 使用教學
+
+如果您想使用 Docker 來運行 ShareLMAPI，請按照以下步驟操作：
+
+### 1. 構建 Docker 鏡像
+
+在含有 Dockerfile 的目錄中運行以下命令來構建 Docker 鏡像：
+
+```bash
+docker build -t sharelmapi .
+```
+
+這將創建一個名為 `sharelmapi` 的 Docker 鏡像。
+
+### 2. 運行 Docker 容器
+
+構建完成後，使用以下命令來運行容器：
+
+```bash
+docker run -p 5000:5000 -p 8000:8000 sharelmapi
+```
+
+這將啟動容器，並將容器內的 5000 和 8000 端口映射到主機的相應端口。
+
+### 3. 訪問 API
+
+現在，您可以通過 `http://localhost:8000` 訪問 API，就像非 Docker 環境中一樣。
+
+### 注意事項
+
+- 確保您的 `model_config.yaml` 文件中的模型設置適合在 Docker 環境中運行。
+- 如果您需要持久化數據或配置，考慮使用 Docker 卷。
+- 對於大型模型，確保您的 Docker 主機有足夠的資源（特別是 GPU 支持，如果需要的話）。
 
 ## API 文檔
 

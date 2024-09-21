@@ -1,0 +1,8 @@
+bitsandbytes==0.43.3
+fastapi==0.115.0
+gunicorn==23.0.0
+peft==0.12.0
+pytest==8.3.3
+PyYAML==6.0.2
+requests==2.32.3
+transformers==4.44.2

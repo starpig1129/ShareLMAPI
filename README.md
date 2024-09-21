@@ -1,7 +1,7 @@
 # ShareLMAPI
 English | [中文](README_CN.md)
 
-ShareLMAPI is a local language model sharing API that uses FastAPI to provide interfaces, allowing different programs to share the same local model, reducing resource consumption. It supports streaming generation and various model configuration methods.
+ShareLMAPI is a local language model sharing API that uses FastAPI to provide interfaces, allowing different programs to share the same local model, thereby reducing resource consumption. It supports streaming generation and various model configuration methods.
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ ShareLMAPI is a local language model sharing API that uses FastAPI to provide in
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
+- [Docker Guide](#docker-guide)
 - [API Documentation](#api-documentation)
 - [Client Usage](#client-usage)
 - [Testing](#testing)
@@ -25,16 +26,16 @@ ShareLMAPI is a local language model sharing API that uses FastAPI to provide in
 
 ## Installation
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/starpig1129/ShareLMAPI.git
 cd ShareLMAPI
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
-Dependencies can be installed using Conda or Pip.
+Dependencies can be installed using either Conda or Pip.
 
 Using Conda:
 
@@ -49,9 +50,9 @@ Using Pip:
 pip install -r requirements.txt
 ```
 
-### 3. Install for local development
+### 3. Local Installation
 
-If you plan to develop this package, use the following command to install it:
+If you plan to use it locally, install the package using:
 
 ```bash
 pip install -e .
@@ -67,7 +68,7 @@ pip install -e .
    - Other model-specific settings
    - Model server URL
 
-Example configuration:
+Configuration example:
 
 ```yaml
 model:
@@ -98,7 +99,7 @@ model_server:
 
 ## Usage
 
-### Start the model server
+### Start the Model Server
 
 First, start the model server to load and manage the language model:
 
@@ -106,14 +107,47 @@ First, start the model server to load and manage the language model:
 uvicorn ShareLMAPI.server.model_server:app --host 0.0.0.0 --port 5000
 ```
 
-### Start the frontend API server
+### Start the Frontend API Server
 
 After the model server is running, start the frontend server to handle client requests:
 
 ```bash
 gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bind 0.0.0.0:8000
-
 ```
+
+## Docker Guide
+
+If you want to use Docker to run ShareLMAPI, follow these steps:
+
+### 1. Build Docker Image
+
+Run the following command in the directory containing the Dockerfile to build the Docker image:
+
+```bash
+docker build -t sharelmapi .
+```
+
+This will create a Docker image named `sharelmapi`.
+
+### 2. Run Docker Container
+
+After building, use the following command to run the container:
+
+```bash
+docker run -p 5000:5000 -p 8000:8000 sharelmapi
+```
+
+This will start the container and map ports 5000 and 8000 from the container to the corresponding ports on the host.
+
+### 3. Access the API
+
+You can now access the API via `http://localhost:8000`, just like in a non-Docker environment.
+
+### Notes
+
+- Ensure that the model settings in your `model_config.yaml` file are suitable for running in a Docker environment.
+- Consider using Docker volumes if you need to persist data or configurations.
+- For large models, ensure your Docker host has sufficient resources (especially GPU support, if needed).
 
 ## API Documentation
 
@@ -139,11 +173,11 @@ Generate model responses without streaming.
 * **Parameters**: Same as `/generate_stream`
 
 ## Client Usage
-### install
+### Installation
 ```bash
 pip install ShareLMAPI
 ```
-Here's an example of how to use the `LocalModelAPIClient` to call the API:
+Here's an example of how to use `ShareLMAPI` to call the API:
 
 ```python
 from ShareLMAPI.client import ShareLMAPIClient
@@ -161,7 +195,7 @@ print(response)
 
 # Using dialogue history
 dialogue_history = [
-    {"role": "user", "content": "Hi, who are you?"},
+    {"role": "user", "content": "Hello, who are you?"},
     {"role": "assistant", "content": "I'm an AI assistant. How can I help you today?"},
     {"role": "user", "content": "Can you explain quantum computing?"}
 ]
@@ -183,7 +217,7 @@ This will run the tests and display the output results.
 
 Contributions of any form are welcome. Please follow these steps:
 
-1. Fork the repository
+1. Fork this repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
