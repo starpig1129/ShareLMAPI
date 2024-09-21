@@ -1,133 +1,162 @@
 # ShareLMAPI
+English | [中文](README_CN.md)
 
-ShareLMAPI 是一個本地語言模型共享 API，通過 FastAPI 提供接口，讓不同程式可以共用同一個本地模型，減少資源消耗。支持流式生成和多種模型配置方式。
+ShareLMAPI is a local language model sharing API that uses FastAPI to provide interfaces, allowing different programs to share the same local model, reducing resource consumption. It supports streaming generation and various model configuration methods.
 
-## 目錄
+## Table of Contents
 
-- [功能特點](#功能特點)
-- [安裝](#安裝)
-- [配置](#配置)
-- [使用](#使用)
-- [API 說明](#api-說明)
-- [客戶端使用](#客戶端使用)
-- [測試](#測試)
-- [貢獻](#貢獻)
-- [許可協議](#許可協議)
+- [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Client Usage](#client-usage)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-## 功能特點
+## Features
 
-- 支持多種模型加載方式：默認、BitsAndBytes 量化、PEFT
-- 支持流式和非流式文本生成
-- 支持對話歷史和系統提示詞
-- 易於配置和擴展
+- Support for multiple model loading methods: default, BitsAndBytes quantization, PEFT
+- Support for streaming and non-streaming text generation
+- Support for dialogue history and system prompts
+- Easy to configure and extend
+- Flexible model server URL configuration
 
-## 安裝
+## Installation
 
-### 1. 克隆項目
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/ShareLMAPI.git
 cd ShareLMAPI
 ```
 
-### 2. 安裝依賴
+### 2. Install dependencies
 
-項目依賴可以通過 Conda 或 Pip 來安裝。
+Dependencies can be installed using Conda or Pip.
 
-使用 Conda 安裝：
+Using Conda:
 
 ```bash
 conda env create -f environment.yml
 conda activate ShareLMAPI
 ```
-### 3. 安裝本地開發環境
 
-如果你計劃開發此套件，請使用以下命令安裝此包：
+Using Pip:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Install for local development
+
+If you plan to develop this package, use the following command to install it:
 
 ```bash
 pip install -e .
 ```
 
-## 配置
+## Configuration
 
-1. 導航到 `configs` 目錄並打開 `model_config.yaml`。
-2. 根據您的需求修改配置。您可以指定：
-   - 模型名稱
-   - 加載方法（default、bitsandbytes 或 peft）
-   - 設備（CPU 或 CUDA）
-   - 其他模型特定設置
+1. Navigate to the `configs` directory and open `model_config.yaml`.
+2. Modify the configuration according to your needs. You can specify:
+   - Model name
+   - Loading method (default, bitsandbytes, or peft)
+   - Device (CPU or CUDA)
+   - Other model-specific settings
+   - Model server URL
 
-## 使用
+Example configuration:
 
-### 啟動模型伺服器
+```yaml
+model:
+  name: "gpt-2"
+  loading_method: "default"
+  default:
+    device: "cuda"
+  bitsandbytes:
+    device: "cuda"
+    quantization_config:
+      quant_type: "nf4"
+      load_in_4bit: True
+      bnb_4bit_quant_type: "nf4"
+      bnb_4bit_compute_dtype: "float16"
+      bnb_4bit_use_double_quant: False
+  peft:
+    device: "cuda"
+    peft_type: "lora"
+    peft_config:
+      r: 8
+      lora_alpha: 16
+      lora_dropout: 0.1
+      target_modules: ["q_proj", "v_proj"]
 
-首先，啟動模型伺服器來加載和管理語言模型：
+model_server:
+  model_server_url: "http://localhost:5000"
+```
+
+## Usage
+
+### Start the model server
+
+First, start the model server to load and manage the language model:
 
 ```bash
 uvicorn ShareLMAPI.server.model_server:app --host 0.0.0.0 --port 5000
 ```
 
-### 啟動前端 API 伺服器
+### Start the frontend API server
 
-在模型伺服器運行後，啟動前端伺服器來處理客戶端的請求：
+After the model server is running, start the frontend server to handle client requests:
 
 ```bash
 gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bind 0.0.0.0:8000
 
 ```
 
-## API 說明
+## API Documentation
 
 ### 1. `/generate_stream`
 
-生成模型回應，支持流式和非流式輸出。
+Generate model responses and stream the results.
 
-* **方法**：`POST`
-* **URL**：`http://localhost:8000/generate_stream`
-* **參數**：
-   * `dialogue_history`：對話歷史（可選）
-   * `prompt`：用戶輸入的提示詞（如果未提供對話歷史）
-   * `max_length`：生成的最大 token 數量
-   * `temperature`：生成隨機性的控制參數
-   * `streamer`：是否使用流式輸出（布爾值）
-   * `generation_kwargs`：其他生成參數（可選）
+* **Method**: `POST`
+* **URL**: `http://localhost:8000/generate_stream`
+* **Parameters**:
+   * `dialogue_history`: List of dialogue messages (optional)
+   * `prompt`: User input prompt (if dialogue history is not provided)
+   * `max_length`: Maximum number of tokens to generate
+   * `temperature`: Parameter to control generation randomness
+   * `generation_kwargs`: Other generation parameters (optional)
 
-* **請求範例**：
+### 2. `/generate`
 
-```bash
-curl -X POST "http://localhost:8000/generate_stream" \
--H "Content-Type: application/json" \
--d '{
-  "prompt": "Once upon a time",
-  "max_length": 50,
-  "temperature": 1.0,
-  "streamer": true
-}'
-```
+Generate model responses without streaming.
 
-* **回應**： 
-  - 流式模式：文本將逐步返回到客戶端
-  - 非流式模式：完整的生成文本將作為 JSON 響應返回
+* **Method**: `POST`
+* **URL**: `http://localhost:8000/generate`
+* **Parameters**: Same as `/generate_stream`
 
-## 客戶端使用
+## Client Usage
 
-以下是如何使用 `ShareLMClient` 調用 API 的示例：
+Here's an example of how to use the `LocalModelAPIClient` to call the API:
 
 ```python
-from local_model_api.client.client import ShareLMClient
+from local_model_api.client.client import LocalModelAPIClient
 
-# 創建 API 客戶端
-client = ShareLMClient(base_url="http://localhost:8000")
+# Create API client
+client = LocalModelAPIClient(base_url="http://localhost:8000")
 
-# 流式生成
+# Streaming generation
 for chunk in client.generate_text("Once upon a time", max_length=50, streamer=True):
     print(chunk, end='', flush=True)
 
-# 非流式生成
+# Non-streaming generation
 response = client.generate_text("What is the capital of France?", max_length=50, streamer=False)
 print(response)
 
-# 使用對話歷史
+# Using dialogue history
 dialogue_history = [
     {"role": "user", "content": "Hi, who are you?"},
     {"role": "assistant", "content": "I'm an AI assistant. How can I help you today?"},
@@ -137,26 +166,26 @@ response = client.generate_text(dialogue_history=dialogue_history, max_length=20
 print(response)
 ```
 
-## 測試
+## Testing
 
-在項目根目錄中運行以下命令來執行測試：
+Run the following command in the project root directory to execute tests:
 
 ```bash
 pytest -s tests/test_client.py
 ```
 
-這將運行測試並顯示輸出結果。
+This will run the tests and display the output results.
 
-## 貢獻
+## Contributing
 
-歡迎任何形式的貢獻。請遵循以下步驟：
+Contributions of any form are welcome. Please follow these steps:
 
-1. Fork 本倉庫
-2. 創建您的特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打開一個 Pull Request
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 許可協議
+## License
 
-此項目基於 MIT 許可協議開放源代碼。查看 [LICENSE](LICENSE) 文件來了解更多細節。
+This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.

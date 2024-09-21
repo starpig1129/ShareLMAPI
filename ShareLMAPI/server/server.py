@@ -36,7 +36,7 @@ def load_config(config_path="configs/model_config.yaml"):
         raise
 
 config = load_config()
-MODEL_SERVER_URL = config["server"]["model_server_url"]
+MODEL_SERVER_URL = config["model_server"]["model_server_url"]
 
 def call_model_server(endpoint, payload, stream=False):
     try:
