@@ -1,0 +1,21 @@
+# environment.yml
+
+name: ShareLMAPI
+channels:
+  - defaults
+  - conda-forge
+  - huggingface
+dependencies:
+  - python=3.10
+  - fastapi
+  - transformers
+  - pyyaml
+  - gunicorn
+  - requests
+  - pytest
+  - uvicorn
+  - pip
+  - pip:
+      - bitsandbytes  # 如果需要，可以通過 pip 安裝
+      - peft
+      - torch  # 根據需要選擇正確的 PyTorch 版本，例如帶有 CUDA 支持的版本

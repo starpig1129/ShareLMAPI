@@ -1,0 +1,38 @@
+# Python忽略的文件
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.eggs/
+
+# pytest 的缓存文件
+.pytest_cache/
+
+# Virtual environment / Conda environment
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+env/*
+.conda/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VSCode settings
+.vscode/
+
+# Linux 系统文件
+*~
+
+# Docker 相關文件
+*.log
+docker-compose.override.yml
+
+configs/model_config.yaml
+
+# 忽略本地環境文件
+*.env
