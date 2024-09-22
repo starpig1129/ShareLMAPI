@@ -1,7 +1,7 @@
 # ShareLMAPI
 English | [中文](README_CN.md)
 ![Project Banner](banner.png)
-ShareLMAPI is a local language model sharing API that uses FastAPI to provide interfaces, allowing different programs to share the same local model, thereby reducing resource consumption. It supports streaming generation and various model configuration methods.
+ShareLMAPI is a local language model sharing API that uses FastAPI to provide interfaces, allowing different programs or device to share the same local model, thereby reducing resource consumption. It supports streaming generation and various model configuration methods.
 
 ## Table of Contents
 
@@ -238,3 +238,18 @@ It combines advanced AI capabilities with practical features, offering a rich ex
 AI-data-analysis-MulitAgent:
 An AI-powered research assistant system that utilizes multiple specialized agents to assist in tasks such as data analysis, visualization, and report generation. The system employs LangChain, OpenAI's GPT models, and LangGraph to handle complex research processes, integrating diverse AI architectures for optimal performance.
 - GitHub: [ai-data-analysis-MulitAgent](https://github.com/starpig1129/ai-data-analysis-MulitAgent)
+
+## Comparison between ShareLMAPI and oLLama
+
+| **Feature**               | **ShareLMAPI**                              | **oLLama**                                      |
+|---------------------------|---------------------------------------------|-------------------------------------------------|
+| **Model Focus**            | Supports a wide variety of models via `transformers` and `PEFT` | Primarily focused on LLaMA models and variants  |
+| **Weight Sharing**         | Yes, models are shared across multiple applications via API, reducing resource usage | No, typically runs single instances of models   |
+| **API Architecture**       | API-first, server-client architecture, flexible model settings | More inference-focused with less emphasis on API |
+| **Model Loading**          | Supports adaptive loading, BitsAndBytes, and PEFT for efficiency | Optimized for running LLaMA models on local hardware |
+| **Streaming Output**       | Supports streaming token output for real-time generation | Primarily focused on batch inference |
+| **Multi-Service Support**  | Designed for sharing models across multiple services and applications | Primarily single-instance model usage |
+| **Customization**          | Highly customizable, allows dynamic adjustments like `max_length`, `temperature`, and other generation parameters | More limited in customizable API features, tuned for LLaMA |
+| **Target Audience**        | Developers building multi-service or resource-optimized applications | Researchers and developers using LLaMA models locally |
+| **Deployment**             | Multi-environment support (Conda, Docker) for seamless deployment and integration | Focuses on providing local deployment of LLaMA models |
+| **Use Case**               | Multi-client interaction with a centralized language model, resource sharing | Primarily for running LLaMA models on consumer hardware |
