@@ -1,6 +1,6 @@
 # ShareLMAPI
 [English](README.md) | 中文
-![System Architecture](Architecture.png)
+![Project Banner](banner.png)
 ShareLMAPI 是一個本地語言模型共享 API，使用 FastAPI 提供接口，允許不同的程序共享同一個本地模型，從而減少資源消耗。它支持流式生成和多種模型配置方法。
 
 ## 目錄

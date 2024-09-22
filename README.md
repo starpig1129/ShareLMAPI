@@ -1,6 +1,6 @@
 # ShareLMAPI
 English | [中文](README_CN.md)
-![System Architecture](Architecture.png)
+![Project Banner](banner.png)
 ShareLMAPI is a local language model sharing API that uses FastAPI to provide interfaces, allowing different programs to share the same local model, thereby reducing resource consumption. It supports streaming generation and various model configuration methods.
 
 ## Table of Contents
