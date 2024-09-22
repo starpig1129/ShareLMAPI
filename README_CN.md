@@ -1,6 +1,6 @@
 # ShareLMAPI
 [English](README.md) | 中文
-
+![System Architecture](Architecture.png)
 ShareLMAPI 是一個本地語言模型共享 API，使用 FastAPI 提供接口，允許不同的程序共享同一個本地模型，從而減少資源消耗。它支持流式生成和多種模型配置方法。
 
 ## 目錄
@@ -226,3 +226,16 @@ pytest -s tests/test_client.py
 ## 許可證
 
 本項目基於 MIT 許可證開源。詳情請參見 [LICENSE](LICENSE) 文件。
+
+## 其他專案
+這裡是我的其他一些值得注意的專案：
+
+PigPig：先進的多模態 LLM Discord 機器人：
+這是一個基於多模態大型語言模型（LLM）的強大 Discord 機器人，旨在通過自然語言與用戶互動。
+它結合了先進的 AI 功能和實用的特性，為 Discord 社群提供了豐富的使用體驗。
+- GitHub: [ai-discord-bot-PigPig](https://github.com/starpig1129/ai-discord-bot-PigPig)
+
+AI-data-analysis-MulitAgent：
+這是一個由 AI 驅動的研究助理系統，利用多個專門代理來幫助完成數據分析、視覺化和報告生成等任務。該系統使用 LangChain、OpenAI 的 GPT 模型和 LangGraph 來處理複雜的研究流程，整合了多樣化的 AI 架構以達到最佳性能。
+
+- GitHub: [ai-data-analysis-MulitAgent](https://github.com/starpig1129/ai-data-analysis-MulitAgent)

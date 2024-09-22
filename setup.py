@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ShareLMAPI",  # 套件的名稱
-    version="0.1.1",  # 套件的版本
+    version="0.1.2",  # 套件的版本
     author="starpig1129",
     author_email="james911129@gmail.com",
     description="A local language model API for sharing models between programs.",
