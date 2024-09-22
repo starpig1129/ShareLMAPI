@@ -223,21 +223,6 @@ Contributions of any form are welcome. Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
-
-This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Other Projects
-Here are some of my other notable projects:
-
-PigPig: Advanced Multi-modal LLM Discord Bot: 
-A powerful Discord bot based on multi-modal Large Language Models (LLM), designed to interact with users through natural language. 
-It combines advanced AI capabilities with practical features, offering a rich experience for Discord communities.
-- GitHub: [ai-discord-bot-PigPig](https://github.com/starpig1129/ai-discord-bot-PigPig)
-
-AI-data-analysis-MulitAgent:
-An AI-powered research assistant system that utilizes multiple specialized agents to assist in tasks such as data analysis, visualization, and report generation. The system employs LangChain, OpenAI's GPT models, and LangGraph to handle complex research processes, integrating diverse AI architectures for optimal performance.
-- GitHub: [ai-data-analysis-MulitAgent](https://github.com/starpig1129/ai-data-analysis-MulitAgent)
 
 ## Comparison between ShareLMAPI and oLLama
 
@@ -253,3 +238,19 @@ An AI-powered research assistant system that utilizes multiple specialized agent
 | **Target Audience**        | Developers building multi-service or resource-optimized applications | Researchers and developers using LLaMA models locally |
 | **Deployment**             | Multi-environment support (Conda, Docker) for seamless deployment and integration | Focuses on providing local deployment of LLaMA models |
 | **Use Case**               | Multi-client interaction with a centralized language model, resource sharing | Primarily for running LLaMA models on consumer hardware |
+
+## License
+
+This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Other Projects
+Here are some of my other notable projects:
+
+PigPig: Advanced Multi-modal LLM Discord Bot: 
+A powerful Discord bot based on multi-modal Large Language Models (LLM), designed to interact with users through natural language. 
+It combines advanced AI capabilities with practical features, offering a rich experience for Discord communities.
+- GitHub: [ai-discord-bot-PigPig](https://github.com/starpig1129/ai-discord-bot-PigPig)
+
+AI-data-analysis-MulitAgent:
+An AI-powered research assistant system that utilizes multiple specialized agents to assist in tasks such as data analysis, visualization, and report generation. The system employs LangChain, OpenAI's GPT models, and LangGraph to handle complex research processes, integrating diverse AI architectures for optimal performance.
+- GitHub: [ai-data-analysis-MulitAgent](https://github.com/starpig1129/ai-data-analysis-MulitAgent)
