@@ -6,17 +6,5 @@ channels:
   - pytorch
 dependencies:
   - python=3.10
-  - fastapi
-  - transformers
-  - pyyaml
-  - gunicorn
-  - requests
-  - pytest
-  - uvicorn
-  - pytorch
   - accelerate
   - pip
-  - pip:
-    - bitsandbytes==0.43.3
-    - peft==0.12.0
-    - huggingface-hub==0.25.0
