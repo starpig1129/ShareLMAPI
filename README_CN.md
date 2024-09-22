@@ -124,7 +124,7 @@ gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bi
 在含有 Dockerfile 的目錄中運行以下命令來構建 Docker 鏡像：
 
 ```bash
-docker build -t sharelmapi .
+docker-compose build
 ```
 
 這將創建一個名為 `sharelmapi` 的 Docker 鏡像。
@@ -134,7 +134,7 @@ docker build -t sharelmapi .
 構建完成後，使用以下命令來運行容器：
 
 ```bash
-docker run -p 5000:5000 -p 8000:8000 sharelmapi
+docker-compose up
 ```
 
 這將啟動容器，並將容器內的 5000 和 8000 端口映射到主機的相應端口。

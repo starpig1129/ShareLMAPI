@@ -1,27 +1,26 @@
-# 使用 conda-forge 提供的 Miniconda 基礎映像
+# Use conda-forge's Miniconda base image
 FROM continuumio/miniconda3
 
-# 設置工作目錄
+# Set working directory
 WORKDIR /app
 
-# 複製 environment.yml 到工作目錄
+# Copy environment.yml to the working directory
 COPY environment.yml /app/environment.yml
 
-# 使用 Conda 創建環境並激活它
+# Create and activate the Conda environment
 RUN conda env create -f environment.yml
 
-# 激活環境
+# Use the conda environment as the default shell
 SHELL ["conda", "run", "-n", "ShareLMAPI", "/bin/bash", "-c"]
 
-# 複製當前目錄的所有內容到容器內部
+# Copy the project files to the container
 COPY . /app
 
-# 安裝項目依賴
+# Install any additional dependencies with pip
 RUN pip install --no-cache-dir -r requirements.txt
-# 設置環境變量
-ENV PYTHONUNBUFFERED=1
-# Expose 8000 端口以便訪問
-EXPOSE 5000 8000
 
-# 使用 Gunicorn 和 Uvicorn 運行 FastAPI 應用
-CMD ["conda", "run", "-n", "ShareLMAPI", "gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "ShareLMAPI.server.model_server:app", "--bind", "0.0.0.0:8000"]
+# Set environment variables to avoid buffering issues
+ENV PYTHONUNBUFFERED=1
+
+# Expose the necessary ports for the two servers
+EXPOSE 5000 8000

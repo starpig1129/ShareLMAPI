@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  model_server:
+    build: .
+    container_name: model_server
+    command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.model_server:app --bind 0.0.0.0:5000
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - api_server
+
+  api_server:
+    build: .
+    container_name: api_server
+    command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker ShareLMAPI.server.server:app --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1

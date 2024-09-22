@@ -124,7 +124,7 @@ If you want to use Docker to run ShareLMAPI, follow these steps:
 Run the following command in the directory containing the Dockerfile to build the Docker image:
 
 ```bash
-docker build -t sharelmapi .
+docker-compose build
 ```
 
 This will create a Docker image named `sharelmapi`.
@@ -134,7 +134,7 @@ This will create a Docker image named `sharelmapi`.
 After building, use the following command to run the container:
 
 ```bash
-docker run -p 5000:5000 -p 8000:8000 sharelmapi
+docker-compose up
 ```
 
 This will start the container and map ports 5000 and 8000 from the container to the corresponding ports on the host.
