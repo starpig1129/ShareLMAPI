@@ -33,9 +33,9 @@ env/*
 docker-compose.override.yml
 
 configs/model_config.yaml
-
+configs/api_config.yaml
 # 忽略本地環境文件
 *.env
-
+data
 dist
 build

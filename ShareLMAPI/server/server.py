@@ -1,31 +1,13 @@
-# MIT License
-
-# Copyright (c) 2024 starpig1129
-
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
 import requests
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import StreamingResponse, JSONResponse
 import logging
 import yaml
+from ShareLMAPI.server.auth import auth_middleware, admin_auth_middleware, add_api_key_to_db, verify_api_key, check_rate_limit
+
 app = FastAPI()
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 def load_config(config_path="configs/model_config.yaml"):
     try:
@@ -48,7 +30,7 @@ def call_model_server(endpoint, payload, stream=False):
         raise HTTPException(status_code=500, detail="Error calling model server")
 
 @app.post("/generate_stream")
-async def generate_stream(request: Request):
+async def generate_stream(request: Request, auth: str = Depends(auth_middleware)):
     try:
         body = await request.json()
         payload = {
@@ -64,8 +46,18 @@ async def generate_stream(request: Request):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.post("/generate")
-async def generate(request: Request):
+async def generate(request: Request, auth: str = Depends(auth_middleware)):
     try:
+        api_key = request.state.api_key
+        logger.debug(f"Received generate request with API key: {api_key}")
+        
+        # Explicitly check rate limit
+        try:
+            check_rate_limit(api_key)
+        except HTTPException as e:
+            logger.warning(f"Rate limit exceeded for API key: {api_key}")
+            raise e
+
         body = await request.json()
         payload = {
             "dialogue_history": body.get("dialogue_history", []),
@@ -75,6 +67,26 @@ async def generate(request: Request):
         }
         response = call_model_server("generate", payload)
         return JSONResponse(content=response.json())
+    except HTTPException as e:
+        logger.error(f"HTTP exception in generate: {str(e)}")
+        raise e
     except Exception as e:
         logger.error(f"Error in generate: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
+@app.post("/add_api_key")
+async def add_api_key(user_id: str, api_key: str, admin_auth: str = Depends(admin_auth_middleware)):
+    try:
+        # Check if the API key already exists
+        if verify_api_key(api_key):
+            return {"message": "API key already exists"}
+        
+        # If it doesn't exist, add it
+        add_api_key_to_db(user_id, api_key)
+        return {"message": "API key added successfully"}
+    except HTTPException as e:
+        # Re-raise HTTP exceptions from add_api_key_to_db
+        raise e
+    except Exception as e:
+        logger.error(f"Error adding API key: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

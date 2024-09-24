@@ -23,8 +23,10 @@ import requests
 import logging
 
 class ShareLMClient:
-    def __init__(self, base_url):
+    def __init__(self, base_url, api_key=None, admin_key=None):
         self.base_url = base_url
+        self.api_key = api_key
+        self.admin_key = admin_key
         self.logger = logging.getLogger(__name__)
 
     def generate_text(self, prompt=None, dialogue_history=None, system_prompt=None, max_length=50, temperature=1.0, streamer=False, generation_kwargs=None):
@@ -45,13 +47,17 @@ class ShareLMClient:
             "generation_kwargs": generation_kwargs or {}
         }
 
+        headers = {}
+        if self.api_key:
+            headers["X-API-Key"] = self.api_key
+
         try:
             if streamer:
-                response = requests.post(f"{self.base_url}/generate_stream", json=payload, stream=True)
+                response = requests.post(f"{self.base_url}/generate_stream", json=payload, stream=True, headers=headers)
                 response.raise_for_status()
                 return self._handle_streaming_response(response)
             else:
-                response = requests.post(f"{self.base_url}/generate", json=payload)
+                response = requests.post(f"{self.base_url}/generate", json=payload, headers=headers)
                 response.raise_for_status()
                 return response.json()["generated_text"]
         except requests.RequestException as e:
@@ -62,3 +68,16 @@ class ShareLMClient:
         for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
             if chunk:
                 yield chunk.replace('\n', '')
+
+    def add_api_key(self, user_id: str, api_key: str):
+        if not self.admin_key:
+            raise ValueError("Admin key is required to add API keys")
+        
+        headers = {"X-Admin-Key": self.admin_key}
+        try:
+            response = requests.post(f"{self.base_url}/add_api_key", params={"user_id": user_id, "api_key": api_key}, headers=headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            self.logger.error(f"Error adding API key: {str(e)}")
+            raise
